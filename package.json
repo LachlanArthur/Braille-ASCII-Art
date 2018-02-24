@@ -1,0 +1,19 @@
+{
+  "name": "braille-ascii-art",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/LachlanArthur/Braille-ASCII-Art.git",
+  "author": "LachlanArthur <lachlanarthur@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "serve": "http-server -a localhost -p 80",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "watch && serve"
+  },
+  "devDependencies": {
+    "http-server": "^0.11.1",
+    "typescript": "^2.7.2"
+  }
+}
