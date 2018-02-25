@@ -41,7 +41,8 @@ function render() {
     context.drawImage(image, 0, 0, canvas.width, canvas.height);
     for (let y = 0; y < canvas.height; y += asciiYDots) {
         for (let x = 0; x < canvas.width; x += asciiXDots) {
-            ascii += ImageData2Braille(context.getImageData(x, y, asciiXDots, asciiYDots));
+            let char = ImageData2Braille(context.getImageData(x, y, asciiXDots, asciiYDots));
+            ascii += `<span>${char}</span>`;
         }
         ascii += '<br>';
     }
