@@ -30,7 +30,7 @@ on(document, 'DOMContentLoaded', function (e) {
 });
 function render() {
     let input = $('#filepicker');
-    let ascii = '';
+    let ascii = [];
     if (!image)
         return;
     asciiHeight = Math.ceil(asciiWidth * asciiXDots * (image.height / image.width) / asciiYDots);
@@ -40,15 +40,17 @@ function render() {
     canvas.height = asciiHeight * asciiYDots;
     context.drawImage(image, 0, 0, canvas.width, canvas.height);
     for (let y = 0; y < canvas.height; y += asciiYDots) {
+        let line = '';
         for (let x = 0; x < canvas.width; x += asciiXDots) {
             let char = ImageData2Braille(context.getImageData(x, y, asciiXDots, asciiYDots));
-            ascii += `<span>${char}</span>`;
+            line += `<span>${char}</span>`;
         }
-        ascii += '<br>';
+        ascii.push(line);
+        console.log('Generated line %d of %d', y / asciiYDots, canvas.height / asciiYDots);
     }
     let output = $('#output');
     output.style.display = 'block';
-    output.innerHTML = ascii;
+    output.innerHTML = ascii.join('<br>');
 }
 function ImageData2Braille(data) {
     if (data.width != asciiXDots || data.height != asciiYDots)
@@ -62,6 +64,10 @@ function ImageData2Braille(data) {
     dots = dots
         .map(([r, g, b, a]) => (r + g + b) / 3)
         .map(grey => +(grey < threshold));
+    // Braille Unicode range starts at U2800 (= 10240 decimal)
+    // Each of the eight dots is mapped to a bit in a byte which
+    // determines its position in the range.
+    // https://en.wikipedia.org/wiki/Braille_Patterns
     return String.fromCharCode(10240 + parseInt(dots.reverse().join(''), 2));
 }
 //# sourceMappingURL=index.js.map

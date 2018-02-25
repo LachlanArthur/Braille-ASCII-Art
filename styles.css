@@ -10,6 +10,7 @@ body {
 	font: normal 12px/1.1em monospace;
 	display: none;
 	margin: 1em 0;
+	white-space: nowrap;
 }
 
 	#output > span {
