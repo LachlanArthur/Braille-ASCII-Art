@@ -2,8 +2,17 @@ import { $, on } from './helpers.js';
 // Braille symbol is 2x4 dots
 const asciiXDots = 2, asciiYDots = 4;
 let threshold = 127, asciiWidth = 100, asciiHeight;
+// Cache image
+let image;
 on(document, 'DOMContentLoaded', function (e) {
-    on($('#filepicker'), 'change', render);
+    on($('#filepicker'), 'change', async function () {
+        if (!this.files || !this.files.length)
+            return;
+        image = document.createElement('img');
+        image.src = URL.createObjectURL(this.files[0].slice(0));
+        await new Promise(resolve => on(image, 'load', resolve));
+        render();
+    });
     on($('#threshold'), 'change', function () {
         let newValue = parseInt(this.value);
         if (newValue == threshold)
@@ -19,14 +28,11 @@ on(document, 'DOMContentLoaded', function (e) {
         render();
     });
 });
-async function render() {
+function render() {
     let input = $('#filepicker');
     let ascii = '';
-    if (!input.files || !input.files.length)
+    if (!image)
         return;
-    let image = document.createElement('img');
-    image.src = URL.createObjectURL(input.files[0].slice(0));
-    await new Promise(resolve => on(image, 'load', resolve));
     asciiHeight = Math.ceil(asciiWidth * asciiXDots * (image.height / image.width) / asciiYDots);
     let canvas = document.createElement('canvas');
     let context = canvas.getContext('2d');
@@ -51,12 +57,7 @@ function ImageData2Braille(data) {
         dots[i] = data.data.subarray(i * 4, (i + 1) * 4);
     }
     // Reorder dots to match Braille dot order
-    dots = [
-        dots[0], dots[3],
-        dots[1], dots[4],
-        dots[2], dots[5],
-        dots[6], dots[7],
-    ];
+    dots = [dots[0], dots[2], dots[4], dots[1], dots[3], dots[5], dots[6], dots[7]];
     dots = dots
         .map(([r, g, b, a]) => (r + g + b) / 3)
         .map(grey => +(grey < threshold));
