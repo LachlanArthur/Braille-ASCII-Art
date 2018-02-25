@@ -6,13 +6,35 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Braille ASCII Art</title>
+
+	<style>
+		body {
+			font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+		}
+		#output {
+			font: normal 14px/1em 'Iosevka', monospace;
+			display: none;
+			margin: 1em 0;
+		}
+	</style>
 </head>
 
 <body>
 
-<input type="file" id="filepicker" accept="png,jpeg,jpg">
+	<h1>Braille ASCII Art</h1>
 
-<script src="dist/index.js" type="module"></script>
+	<label for="filepicker">File</label>
+	<input type="file" id="filepicker" accept=".png,.jpeg,.jpg">
+	<br>
+	<label for="threshold">Threshold</label>
+	<input type="range" id="threshold" min="0" max="255" value="127">
+	<br>
+	<label for="width">Width</label>
+	<input type="number" id="width" min="1" value="100"> characters
+
+	<div id="output"></div>
+
+	<script src="dist/index.js" type="module"></script>
 
 </body>
 
