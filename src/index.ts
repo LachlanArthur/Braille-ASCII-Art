@@ -69,12 +69,7 @@ function ImageData2Braille( data: ImageData ): string {
 	}
 
 	// Reorder dots to match Braille dot order
-	dots = [
-		dots[ 0 ], dots[ 3 ],
-		dots[ 1 ], dots[ 4 ],
-		dots[ 2 ], dots[ 5 ],
-		dots[ 6 ], dots[ 7 ],
-	];
+	dots = [ dots[ 0 ], dots[ 2 ], dots[ 4 ], dots[ 1 ], dots[ 3 ], dots[ 5 ], dots[ 6 ], dots[ 7 ] ];
 
 	dots = dots
 		.map( ( [ r, g, b, a ] ) => ( r + g + b ) / 3 )
