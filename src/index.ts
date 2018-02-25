@@ -8,9 +8,20 @@ let threshold = 127,
 	asciiWidth = 100,
 	asciiHeight;
 
+// Cache image
+let image: HTMLImageElement;
+
 on( document, 'DOMContentLoaded', function ( e ) {
 
-	on( $<HTMLInputElement>( '#filepicker' ), 'change', render );
+	on( $<HTMLInputElement>( '#filepicker' ), 'change', async function () {
+		if ( !this.files || !this.files.length ) return;
+
+		image = document.createElement( 'img' );
+		image.src = URL.createObjectURL( this.files[ 0 ].slice( 0 ) );
+		await new Promise( resolve => on( image, 'load', resolve ) );
+
+		render();
+	} );
 
 	on( $<HTMLInputElement>( '#threshold' ), 'change', function () {
 		let newValue = parseInt( this.value );
@@ -28,15 +39,11 @@ on( document, 'DOMContentLoaded', function ( e ) {
 
 } );
 
-async function render() {
+function render() {
 	let input = $<HTMLInputElement>( '#filepicker' )!;
 	let ascii = '';
 
-	if ( !input.files || !input.files.length ) return;
-
-	let image = document.createElement( 'img' );
-	image.src = URL.createObjectURL( input.files[ 0 ].slice( 0 ) );
-	await new Promise( resolve => on( image, 'load', resolve ) );
+	if ( !image ) return;
 
 	asciiHeight = Math.ceil( asciiWidth * asciiXDots * ( image.height / image.width ) / asciiYDots );
 
