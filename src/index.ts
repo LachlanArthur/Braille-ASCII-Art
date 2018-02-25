@@ -62,7 +62,6 @@ function render() {
 			line += `<span>${char}</span>`;
 		}
 		ascii.push( line );
-		console.log( 'Generated line %d of %d', y / asciiYDots, canvas.height / asciiYDots );
 	}
 
 	let output = $( '#output' )!;
