@@ -1,0 +1,18 @@
+body {
+	font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+}
+
+#width {
+	width: 5em;
+}
+
+#output {
+	font: normal 12px/1.1em monospace;
+	display: none;
+	margin: 1em 0;
+}
+
+	#output > span {
+		display: inline-block;
+		width: 0.5em;
+	}

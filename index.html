@@ -6,38 +6,22 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Braille ASCII Art</title>
-
-	<style>
-		body {
-			font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
-		}
-		#width {
-			width: 5em;
-		}
-		#output {
-			font: normal 14px/1em monospace;
-			display: none;
-			margin: 1em 0;
-		}
-		#output > span {
-			display: inline-block;
-			width: 0.5em;
-		}
-	</style>
+	<link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
 	<h1>Braille ASCII Art</h1>
+	<p>By <a href="https://lach.la">Lachlan</a> | <a href="https://github.com/LachlanArthur/Braille-ASCII-Art">GitHub:LachlanArthur/Braille-ASCII-Art</a></p>
 
-	<label for="filepicker">File</label>
+	<label for="filepicker">Image</label>
 	<input type="file" id="filepicker" accept=".png,.jpeg,.jpg">
 	<br>
 	<label for="threshold">Threshold</label>
 	<input type="range" id="threshold" min="0" max="255" value="127">
 	<br>
 	<label for="width">Width</label>
-	<input type="number" id="width" min="1" value="100" step="10"> characters
+	<input type="number" id="width" value="100" step="10"> characters
 
 	<div id="output" contenteditable="true"></div>
 
