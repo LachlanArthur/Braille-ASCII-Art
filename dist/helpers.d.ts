@@ -10,4 +10,4 @@ declare function on<E extends HTMLElement, K extends keyof HTMLElementEventMap>(
 declare function on<E extends HTMLElement>(elements: Array<E | null>, type: string, listener: (this: E, ev: Event) => any, options?: boolean | AddEventListenerOptions): void;
 declare function on<K extends keyof HTMLElementEventMap>(elements: Document, type: K, listener: (this: Document, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
 declare function on(elements: Document, type: string, listener: (this: Document, ev: Event) => any, options?: boolean | AddEventListenerOptions): void;
-export { $, $$, on };
+export { $, $$, on, };

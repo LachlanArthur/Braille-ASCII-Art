@@ -1,13 +1,34 @@
+:root {
+	--font-size: 10px;
+}
+
 body {
 	font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
 }
 
-#width {
+body.invert {
+	color: white;
+	background-color: black;
+}
+
+label {
+	display: inline-block;
+	min-width: 8rem;
+	text-align: right;
+	padding-right: 0.5rem;
+}
+
+input[type="number"] {
 	width: 5em;
 }
 
+body:not([data-dither="threshold"]) [data-show="dither=threshold"],
+body:not([data-dither="floyd-steinberg"]) [data-show="dither=floyd-steinberg"] {
+	display: none;
+}
+
 #output {
-	font: normal 12px/1.1em monospace;
+	font: normal var(--font-size)/1em monospace;
 	display: none;
 	margin: 1em 0;
 	white-space: nowrap;

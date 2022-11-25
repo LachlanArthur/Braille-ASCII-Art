@@ -6,28 +6,56 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Braille ASCII Art</title>
-	<link rel="stylesheet" href="styles.css">
+	<link rel="stylesheet" href="styles.css?v=2">
 </head>
 
-<body>
+<body data-dither="floyd-steinberg">
 
 	<h1>Braille ASCII Art</h1>
 	<p>By <a href="https://lach.la">Lachlan</a> | <a href="https://github.com/LachlanArthur/Braille-ASCII-Art">GitHub:LachlanArthur/Braille-ASCII-Art</a></p>
 
-	<label for="filepicker">Image</label>
-	<input type="file" id="filepicker" accept=".png,.jpeg,.jpg">
-	<br>
-	<label for="threshold">Threshold</label>
-	<input type="range" id="threshold" min="0" max="255" value="127">
-	<br>
-	<label for="width">Width</label>
-	<input type="number" id="width" value="100" step="10"> characters (>500 gets laggy)
+	<p>
+		<label for="filepicker">Image</label>
+		<input type="file" id="filepicker" accept=".png,.jpeg,.jpg">
+	</p>
+
+	<p>
+		<label for="dither">Dither Mode</label>
+		<select id="dither">
+			<option value="floyd-steinberg">Floyd-Steinberg</option>
+			<option value="threshold">Threshold</option>
+		</select>
+	</p>
+
+	<p data-show="dither=threshold">
+		<label for="threshold">Threshold</label>
+		<input type="range" id="threshold" min="0" max="255" value="127">
+	</p>
+
+	<p>
+		<label for="width">Width</label>
+		<input type="number" id="width" value="100" step="10"> characters (>500 gets laggy)
+	</p>
+
+	<p>
+		<label for="invert">Invert</label>
+		<input type="checkbox" id="invert">
+	</p>
+
+	<p>
+		<label for="font-size">Preview font size</label>
+		<input type="number" id="font-size" value="10">
+	</p>
+
+	<p>
+		<button id="copy">Copy</button>
+	</p>
 
 	<div id="output" contenteditable="true"></div>
 
 	<p>(Yes, I know Braille is Unicode, not ASCII)</p>
 
-	<script src="dist/index.js" type="module"></script>
+	<script src="dist/index.js?v=2" type="module"></script>
 
 </body>
 
