@@ -12,5 +12,8 @@ function on(elements, type, listener, options) {
         elements.addEventListener.call(elements, type, listener, options);
     }
 }
+export function rgbaOffset(x, y, width) {
+    return width * 4 * y + 4 * x;
+}
 export { $, $$, on, };
 //# sourceMappingURL=helpers.js.map
