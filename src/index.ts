@@ -97,6 +97,7 @@ async function render() {
 
 	const greyPixels = context.getImageData( 0, 0, canvas.width, canvas.height );
 	const ditheredPixels = dither( greyPixels );
+	const targetValue = invert ? 255 : 0;
 
 	for ( let y = 0; y < canvas.height; y += asciiYDots ) {
 		const line: number[] = [];
@@ -105,16 +106,17 @@ async function render() {
 			// Each of the eight dots is mapped to a bit in a byte which
 			// determines its position in the range.
 			// https://en.wikipedia.org/wiki/Braille_Patterns
-			line.push( 10240 + parseInt( [
-				ditheredPixels.data.at( rgbaOffset( x + 1, y + 3, canvas.width ) ) === ( invert ? 255 : 0 ) ? 1 : 0,
-				ditheredPixels.data.at( rgbaOffset( x + 0, y + 3, canvas.width ) ) === ( invert ? 255 : 0 ) ? 1 : 0,
-				ditheredPixels.data.at( rgbaOffset( x + 1, y + 2, canvas.width ) ) === ( invert ? 255 : 0 ) ? 1 : 0,
-				ditheredPixels.data.at( rgbaOffset( x + 1, y + 1, canvas.width ) ) === ( invert ? 255 : 0 ) ? 1 : 0,
-				ditheredPixels.data.at( rgbaOffset( x + 1, y + 0, canvas.width ) ) === ( invert ? 255 : 0 ) ? 1 : 0,
-				ditheredPixels.data.at( rgbaOffset( x + 0, y + 2, canvas.width ) ) === ( invert ? 255 : 0 ) ? 1 : 0,
-				ditheredPixels.data.at( rgbaOffset( x + 0, y + 1, canvas.width ) ) === ( invert ? 255 : 0 ) ? 1 : 0,
-				ditheredPixels.data.at( rgbaOffset( x + 0, y + 0, canvas.width ) ) === ( invert ? 255 : 0 ) ? 1 : 0,
-			].join( '' ), 2 ) );
+			line.push(
+				10240
+				+ ( +( ditheredPixels.data.at( rgbaOffset( x + 1, y + 3, canvas.width ) ) === targetValue ) << 7 )
+				+ ( +( ditheredPixels.data.at( rgbaOffset( x + 0, y + 3, canvas.width ) ) === targetValue ) << 6 )
+				+ ( +( ditheredPixels.data.at( rgbaOffset( x + 1, y + 2, canvas.width ) ) === targetValue ) << 5 )
+				+ ( +( ditheredPixels.data.at( rgbaOffset( x + 1, y + 1, canvas.width ) ) === targetValue ) << 4 )
+				+ ( +( ditheredPixels.data.at( rgbaOffset( x + 1, y + 0, canvas.width ) ) === targetValue ) << 3 )
+				+ ( +( ditheredPixels.data.at( rgbaOffset( x + 0, y + 2, canvas.width ) ) === targetValue ) << 2 )
+				+ ( +( ditheredPixels.data.at( rgbaOffset( x + 0, y + 1, canvas.width ) ) === targetValue ) << 1 )
+				+ ( +( ditheredPixels.data.at( rgbaOffset( x + 0, y + 0, canvas.width ) ) === targetValue ) << 0 )
+			);
 		}
 		const lineChars = String.fromCharCode.apply( String, line );
 		asciiText.push( lineChars );
