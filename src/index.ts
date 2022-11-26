@@ -5,7 +5,7 @@ import KernelDitherer from './kernel-ditherer.js';
 const asciiXDots = 2,
 	asciiYDots = 4;
 
-type DithererName = 'threshold' | 'floydSteinberg';
+type DithererName = 'threshold' | 'floydSteinberg' | 'stucki' | 'atkinson';
 
 const ditherers: Record<DithererName, Ditherer> = {
 	threshold: new KernelDitherer(
@@ -20,6 +20,24 @@ const ditherers: Record<DithererName, Ditherer> = {
 			[ 3, 5, 1 ],
 		],
 		16,
+	),
+	stucki: new KernelDitherer(
+		[ 2, 0 ],
+		[
+			[ 0, 0, 0, 8, 4 ],
+			[ 2, 4, 8, 4, 2 ],
+			[ 1, 2, 4, 2, 1 ],
+		],
+		42,
+	),
+	atkinson: new KernelDitherer(
+		[ 1, 0 ],
+		[
+			[ 0, 0, 1, 1 ],
+			[ 1, 1, 1, 0 ],
+			[ 0, 1, 0, 0 ],
+		],
+		8,
 	),
 };
 
