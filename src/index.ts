@@ -10,7 +10,7 @@ let ditherMode: DitherMode = 'floyd-steinberg',
 	invert = false,
 	threshold = 127,
 	asciiWidth = 100,
-	asciiHeight;
+	asciiHeight = 100;
 
 let image: HTMLImageElement;
 let canvas = document.createElement( 'canvas' );
@@ -80,6 +80,8 @@ async function render() {
 	if ( !image ) return;
 
 	asciiHeight = Math.ceil( asciiWidth * asciiXDots * ( image.height / image.width ) / asciiYDots );
+	document.documentElement.style.setProperty( '--width', asciiWidth.toString() );
+	document.documentElement.style.setProperty( '--height', asciiHeight.toString() );
 
 	canvas.width = asciiWidth * asciiXDots;
 	canvas.height = asciiHeight * asciiYDots;
