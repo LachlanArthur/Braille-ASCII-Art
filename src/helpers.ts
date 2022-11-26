@@ -41,6 +41,10 @@ function on<E extends HTMLElement>( elements: E | NodeListOf<E> | Array<E | Docu
 	}
 }
 
+export function rgbaOffset( x: number, y: number, width: number ) {
+	return width * 4 * y + 4 * x;
+}
+
 export {
 	$,
 	$$,

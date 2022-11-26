@@ -1,12 +1,29 @@
-import { $, $$, on } from './helpers.js';
+import { $, on, rgbaOffset } from './helpers.js';
+import KernelDitherer from './kernel-ditherer.js';
 
 // Braille symbol is 2x4 dots
 const asciiXDots = 2,
 	asciiYDots = 4;
 
-type DitherMode = 'threshold' | 'floyd-steinberg';
+type DithererName = 'threshold' | 'floydSteinberg';
 
-let ditherMode: DitherMode = 'floyd-steinberg',
+const ditherers: Record<DithererName, Ditherer> = {
+	threshold: new KernelDitherer(
+		[ 0, 0 ],
+		[],
+		1,
+	),
+	floydSteinberg: new KernelDitherer(
+		[ 1, 0 ],
+		[
+			[ 0, 0, 7 ],
+			[ 3, 5, 1 ],
+		],
+		16,
+	),
+};
+
+let dithererName: DithererName = 'floydSteinberg',
 	invert = false,
 	threshold = 127,
 	asciiWidth = 100,
@@ -30,9 +47,9 @@ on( document, 'DOMContentLoaded', function ( e ) {
 	} );
 
 	on( $<HTMLSelectElement>( '#dither' ), 'change', function () {
-		let newValue = this.value as DitherMode;
-		if ( newValue == ditherMode ) return;
-		ditherMode = newValue;
+		let newValue = this.value as DithererName;
+		if ( newValue == dithererName ) return;
+		dithererName = newValue;
 		render();
 	} );
 
@@ -69,10 +86,6 @@ on( document, 'DOMContentLoaded', function ( e ) {
 
 } );
 
-function rgbaOffset( x: number, y: number, width: number ) {
-	return width * 4 * y + 4 * x;
-}
-
 async function render() {
 	let asciiText: string[] = [];
 	let asciiHtml: string[] = [];
@@ -95,8 +108,10 @@ async function render() {
 	context.globalCompositeOperation = 'luminosity';
 	context.drawImage( image, 0, 0, canvas.width, canvas.height );
 
+	const ditherer = ditherers[ dithererName ];
+
 	const greyPixels = context.getImageData( 0, 0, canvas.width, canvas.height );
-	const ditheredPixels = dither( greyPixels );
+	const ditheredPixels = ditherer.dither( greyPixels, threshold );
 	const targetValue = invert ? 255 : 0;
 
 	for ( let y = 0; y < canvas.height; y += asciiYDots ) {
@@ -131,61 +146,4 @@ async function render() {
 	output.style.display = 'block';
 	output.innerHTML = '';
 	output.insertAdjacentHTML( 'afterbegin', asciiHtml.join( '<br>' ) );
-}
-
-function dither( input: ImageData ) {
-	switch ( ditherMode ) {
-
-		case 'threshold':
-			return ditherThreshold( input );
-
-		case 'floyd-steinberg':
-			return ditherFloydSteinberg( input );
-
-	}
-}
-
-function ditherThreshold( input: ImageData ): ImageData {
-	const output = context.createImageData( canvas.width, canvas.height );
-
-	for ( let y = 0; y < canvas.height; y++ ) {
-		for ( let x = 0; x < canvas.width; x++ ) {
-			const offset = rgbaOffset( x, y, canvas.width );
-			const value = input.data.at( offset )! > threshold ? 255 : 0;
-			output.data.set( [ value, value, value, 255 ], offset );
-		}
-	}
-
-	return output;
-}
-
-function ditherFloydSteinberg( input: ImageData ): ImageData {
-	const output = context.createImageData( canvas.width, canvas.height );
-
-	for ( let y = 0; y < canvas.height; y++ ) {
-		for ( let x = 0; x < canvas.width; x++ ) {
-			const offset = rgbaOffset( x, y, canvas.width );
-			const greyPixel = input.data.at( offset )!;
-			const value = greyPixel > threshold ? 255 : 0;
-			output.data.set( [ value, value, value, 255 ], offset );
-
-			// Diffuse error to neighboring pixels
-			const error = greyPixel - value;
-			const neighbors = [
-				[ rgbaOffset( x + 1, y + 0, canvas.width ), 7 / 16 ],
-				[ rgbaOffset( x - 1, y + 1, canvas.width ), 3 / 16 ],
-				[ rgbaOffset( x + 0, y + 1, canvas.width ), 5 / 16 ],
-				[ rgbaOffset( x + 1, y + 1, canvas.width ), 1 / 16 ],
-			];
-
-			for ( const [ offset, scale ] of neighbors ) {
-				const value = input.data.at( offset );
-				if ( value ) {
-					input.data.set( [ value + error * scale ], offset );
-				}
-			}
-		}
-	}
-
-	return output;
 }
