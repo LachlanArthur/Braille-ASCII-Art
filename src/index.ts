@@ -121,6 +121,8 @@ async function render() {
 
 	ascii = asciiText.join( '\n' );
 
+	$( '#char-count' )!.textContent = ascii.length.toLocaleString();
+
 	let output = $( '#output' )!;
 	output.style.display = 'block';
 	output.innerHTML = '';
