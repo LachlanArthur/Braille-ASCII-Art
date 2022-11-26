@@ -33,13 +33,12 @@ on( document, 'DOMContentLoaded', function ( e ) {
 		let newValue = this.value as DitherMode;
 		if ( newValue == ditherMode ) return;
 		ditherMode = newValue;
-		document.body.dataset.dither = newValue;
 		render();
 	} );
 
 	on( $<HTMLInputElement>( '#threshold' ), 'change', function () {
 		let newValue = parseInt( this.value );
-		if ( ditherMode !== 'threshold' || newValue == threshold ) return;
+		if ( newValue == threshold ) return;
 		threshold = newValue;
 		render();
 	} );

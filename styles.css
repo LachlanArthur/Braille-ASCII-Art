@@ -22,11 +22,6 @@ input[type="number"] {
 	width: 5em;
 }
 
-body:not([data-dither="threshold"]) [data-show="dither=threshold"],
-body:not([data-dither="floyd-steinberg"]) [data-show="dither=floyd-steinberg"] {
-	display: none;
-}
-
 #output {
 	font: normal var(--font-size)/1em monospace;
 	display: none;
